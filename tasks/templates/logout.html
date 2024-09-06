@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Успешно</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            --main-color: #7C73C0;
+            --secondary-color: #fff; 
+            transition: all .3s;
+            background-color: #393841;
+        }
+
+        .wrapper {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal {
+            width: 300px;
+            border: 3px solid var(--main-color);
+            border-radius: 15px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center ;
+            color: var(--secondary-color);
+            position: relative;
+        }
+
+        .text {
+            margin-top: 30px;
+        }
+
+        .modal > form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 35px;
+        }
+        
+        form > label {
+            display: flex;
+            flex-direction: column;
+            align-items : center;
+            gap: 5px;
+        }
+
+        label > input {
+            width: 250px;
+            height: 25px;
+            border-radius: 5px;
+            border: 2px solid var(--main-color);
+            padding: 2px 8px;
+            color: var(--secondary-color)
+        }
+
+        label > input:focus {
+            outline: none;
+        }
+
+        form > button {
+            margin-top: 30px;
+        }
+
+        .recommend-button {
+            border: 2px solid var(--main-color);
+            border-radius: 8px;
+            padding: 5px 10px;
+            font-size: 15px;
+            color: var(--main-color);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: transparent;
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
+
+        .recommend-button:hover {
+            color: white;
+            background: var(--main-color);
+        }
+
+        .recommend-button:first-child {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            border: none;
+            color: #b6b6b6;
+        }
+
+        .recommend-button:first-child:hover {
+            color: #4a4479;
+            background-color: transparent;
+        }
+
+        .error {
+            position: absolute;
+            text-align: center;
+            color: tomato;
+            font-size: 12px;
+            bottom: 90px;
+            margin-left: auto;
+            margin-right: auto;
+            left: 0;
+            right: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="modal">
+            <a href="/" class="recommend-button">Вернуться</a>
+
+            <p class="text">Вы вышли из аккаунта</p>
+        </div>
+    </div>
+</body>
+</html>

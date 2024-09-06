@@ -1,0 +1,546 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            --main-color: #7C73C0;
+            --secondary-color: #fff; 
+            transition: all .3s;
+            background-color: #393841;
+        }
+
+        .wrapper {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            max-height: 100vh;
+            padding: 25px;
+        }
+
+        .left {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 26%;
+            position: relative;
+        }   
+
+        .theme {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 40px;
+            height: 24px;
+            border: 3px solid var(--main-color);
+            border-radius: 20px;
+            padding: 3px;
+            cursor: pointer;
+            display: flex;
+            justify-content: flex-start;
+            transition: all .3s;
+        }
+
+        .theme.active {
+            justify-content: flex-end;
+            background: #393841;
+        }
+
+        .theme-button {
+            width: 13px;
+            height: 100%;
+            background: var(--main-color);
+            border-radius: 50%;
+        }
+
+        .date {
+            width: 100%;
+            height: 200px;
+            border-radius: 15px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            border: 4px solid var(--main-color);
+        }
+
+        .date-time {
+            font-size: 80px;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+        }
+
+        .date-string {
+            font-size: 24px;
+            color: var(--secondary-color);
+        }
+
+        .tasks {
+            max-width: 100%;
+            height: 70vh;
+            border-radius: 15px;
+            padding: 15px;
+            border: 4px solid var(--main-color);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            text-decoration: none;
+            overflow-y: auto
+        }
+
+        .tasks-heading {
+            font-size: 27px;
+            color: var(--secondary-color);
+            margin-bottom: 18px;
+        }
+
+        .tasks-item {
+            color: var(--secondary-color);
+            font-size: 18px;
+        }
+
+        .tasks-item:hover {
+            text-decoration: underline;
+        }
+
+        .center {
+            width: 33%;
+            display: flex;
+            flex-direction: column;
+            border: 4px solid var(--main-color);
+            border-radius: 15px;
+            padding: 15px;
+        }
+
+        .recommend {
+            width: 100%;
+            color: var(--secondary-color);
+            margin-bottom: 40px;
+        }
+
+        .recommend-heading {
+            font-size: 20px;
+            font-weight: 400;
+            margin-bottom: 20px;
+        }
+
+        .recommend-buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .recommend-button {
+            border: 2px solid var(--main-color);
+            border-radius: 8px;
+            padding: 5px 10px;
+            font-size: 15px;
+            color: var(--main-color);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: transparent;
+        }
+
+        .recommend-button:hover {
+            color: white;
+            background: var(--main-color);
+        }
+
+        .others-heading {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--secondary-color);
+        }
+
+        .others-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .others-item {
+            width: 48%;
+            padding: 10px;
+            border-radius: 10px;
+            color: var(--secondary-color);
+            border: 4px solid var(--main-color);
+            cursor: pointer;
+        }
+
+        .others-name {
+            font-weight: 400;
+            line-height: 1.1;
+        }
+
+        .others-item:hover > .others-name {
+            text-decoration: underline;
+        }
+
+        .recommend-button {
+            text-decoration: none;
+            color: var(--main-color);
+        }
+
+        /* ... */
+
+        .right {
+            width: 23%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .profile {
+            border: 4px solid var(--main-color);
+            border-radius: 15px;
+            width: 100%;
+            height: 38%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+        }
+
+        .profile > .task-item {
+            color: var(--secondary-color);
+            font-size: 22px;
+        }
+
+        .statistic {
+            border: 4px solid var(--main-color);
+            border-radius: 15px;
+            width: 100%;
+            height: 58%;
+        }
+
+        
+         .profile-image {
+            overflow: hidden;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .profile-image > img {
+            width: 100%;
+        }
+
+        .profile-form {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .profile-form > .update > input {
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 8px;
+            z-index: 1;
+            opacity: 0;
+        }
+
+        .profile-form > button {
+            position: absolute;
+            bottom: 5px;
+            left: 25px;
+            z-index: 2;
+            background: #7C73C0;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            padding: 8px;
+            opacity: 0;
+            transition: all .3s;
+        }
+
+        .profile-form > .update {
+            position: absolute;
+            top: 5px;
+            left: 25px;
+            z-index: 2;
+            background: #7C73C0;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            padding: 8px;
+            opacity: 0;
+            transition: all .3s;
+            cursor: pointer;
+        }
+
+        .profile-form > .update > img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .update > img {
+            -webkit-filter: invert(100%); /* Safari/Chrome */
+            filter: invert(100%);
+        }
+ 
+        .profile:hover > .profile-image > form > button,
+        .profile:hover > .profile-image > form > .update
+        {
+            opacity: 1;
+        }
+
+        .profile-form > button > img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .statistic {
+            border: solid 4px var(--main-color);
+            border-radius: 15px;
+            width: 100%;
+            height: 58%;
+            display: flex;
+            justify-content: center;    
+            align-items: center;
+        }
+        .icons {
+            width: 50px;
+            height: 50px;
+        }
+        .statistic-item {
+            display: flex; 
+            justify-content: space-around;
+        }
+        .statistic-icon {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding-right: 35px;
+        }
+
+        .statistic-text {
+            display: flex;
+            flex-direction: column; 
+            justify-content: space-around;
+            color: var(--secondary-color);
+            font-size: 16px;
+            font-weight: 550;
+            gap: 20px;
+        }
+        .icon-stat {
+            width: 55px;
+            height: 55px; /* Добавлено, чтобы установить высоту и избежать искажения изображения */
+        }
+
+
+
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="left">
+            <!-- <div class="theme">
+                <div class="theme-button"></div>
+            </div> -->
+
+            <div class="date">
+                <h2 class="date-time">
+                    12:30
+                </h2>
+                <h3 class="date-string">
+                    6 мая - 2023
+                </h3>
+            </div>
+
+            <div class="tasks">
+                <h3 class="tasks-heading">
+                    Последние задачи:
+                </h3>
+                {% for i in latest_tasks %}
+                    <a href="/solve/{{ i.id }}" class="tasks-item" style="text-decoration: none;">
+                        <b class="last-task-underline">
+                            TASKS №
+                            {% if i.id < 10 %}
+                                0{{ i.id }}
+                            {% else %}
+                                {{ i.id }}
+                            {% endif %},
+                            {{ i.difficulty }}:
+                        </b>
+                        {{ i.title }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="center">
+            <div class="recommend">
+                <h3 class="recommend-heading">
+                    <b>
+                        Задача TASKS №
+                        {{ new_random_task }}
+                        <!-- {% if latest_task.id < 10 %}
+                            0{{ latest_task.id }}
+                        {% else %}
+                            {{ latest_task.id }}
+                        {% endif %},
+                        {{ latest_task.difficulty }}: -->
+                    </b>
+                    <span class="substring">
+                        {% if new_random_task.description|length > 179 %}
+                            {{ new_random_task.description|slice:"0:179" }}...
+                        {% else %}
+                            {{ new_random_task.description }}
+                        {% endif %}
+                    </span>
+                </h3>
+
+                <div class="recommend-buttons">
+                    <a href="{% url 'main' %}" class="recommend-button">
+                        Пропустить
+                    </a>
+                    
+
+                    <a href="/solve/{{ new_random_task.id }}" class="recommend-button">
+                        Начать
+                    </a>
+                </div>
+            </div>
+
+            <div class="others">
+                <h3 class="others-heading">
+                    Другие задачи:
+                </h3>
+
+                <div class="others-list">
+                    {% for i in random_tasks %}
+                    <div class="others-item">
+                        <h3 class="others-name">
+                            <a style="text-decoration: none; color: #fff" href="/solve/{{ i.id }}">
+                                TASKS №
+                                {% if i.id < 8 %}
+                                    0{{ i.id }}
+                                {% else %}
+                                    {{ i.id }}
+                                {% endif %},
+                                {{ i.difficulty }}:
+                            </a>
+                            {% if i.title|length > 45 %}
+                                {{ i.title|slice:"0:45" }}...
+                            {% else %}
+                                {{ i.title }}
+                            {% endif %}
+                        </h3>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="right">
+            <div class="profile">
+                <div class="profile-image">
+                    <form
+                        action=""
+                        method="post"
+                        class="profile-form"
+                        enctype="multipart/form-data"
+                    >
+                        {% csrf_token %}
+                        <div class="update">
+                            <img src="https://cdn-icons-png.flaticon.com/512/4277/4277132.png" alt="">
+                            {{ form.pfp }}
+                        </div>
+                        <button type="submit">
+                            <img src="https://specrent78.ru/wp-content/themes/soltend/img/mcheck2.png" alt="">
+                        </button>
+                    </form>
+
+                    <img src="/media/{{profile.pfp}}" alt="">
+                    <!-- <img src="/media/{{profile.pfp}}" alt="Аватар" style="width: 100px; height: 100px; object-fit: cover;"> -->
+                </div>
+
+                <h3 class="task-item">
+                    {{ user.username }}
+                </h3>
+
+                <a style="color: #fff;" href="/logout">
+                    Выйти
+                </a>
+            </div>
+            <div class="statistic">
+                <div class="statistic-item">
+                    <div class="statistic-icon">
+                        <img class="icon-stat" src="{% static 'tasks/img/решено_stat.png' %}" alt="">
+                        <img class="icon-stat" src="{% static 'tasks/img/группа_stat.png' %}" alt="">
+                        <img class="icon-stat" src="{% static 'tasks/img/расписание_stat.png' %}" alt="">
+                    </div>
+                    <div class="statistic-text">
+                        <p class="profile-stat"> Решено: <br> {{ profile.solved_problems }} заданий </p>
+                        <p class="profile-stat"> Группа: <br> {{ profile.groups }} </p> 
+                        <p class="profile-stat"> Расписание: <br> {{ profile.schedule_day }} <br> {{ profile.schedule_time }} </p>
+                    </div>
+                </div>
+            </div>
+                     
+    </div>
+
+    <script>
+        let timeElement = document.querySelector('.date-time');
+
+        function initTime() {
+            let date = new Date();
+            let minutes = date.getMinutes();
+            let hours = date.getHours();
+
+            if(minutes < 10) {
+                minutes = '0' + String(minutes);
+            };
+
+            if(hours < 10) {
+                hours = '0' + String(hours);
+            };
+ 
+            timeElement.innerText = String(hours) + ':' + String(minutes);
+        };
+
+        initTime();
+        
+        setInterval(initTime, 30000);
+    </script>
+
+    <script>
+        let date = new Date();
+        let monthArray = [
+            "Январь", "Февраль", "Март", "Апрель",
+            "Май", "Июнь", "Июль", "Август", 
+            "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"
+        ]
+        let currentMonth = date.getMonth();
+        let currentYear = date.getFullYear();
+        let currentDay = date.getDate();
+        let dateElement = document.querySelector('.date-string');
+        
+        dateElement.innerText = monthArray[currentMonth] + ' ' + currentDay + '-e' + ', ' + currentYear;
+    </script>
+    <script>
+        document.getElementById('skipTaskBtn').addEventListener('click', function() {
+            // Перезапуск страницы
+            window.location.reload();
+        });
+    </script>
+</body>
+</html>

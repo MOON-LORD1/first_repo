@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ task.title }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #2d2d2d;
+            /* color: #fff; */
+        }
+
+        header {
+            background-color: #2a313d;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin: 0;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex; /* Используем flexbox для разделения на колонки */
+        }
+
+        .left-column {
+            flex: 1; /* Левая колонка будет занимать 70% ширины */
+            padding-right: 20px; /* Расстояние между колонками */
+        }
+
+        .right-column {
+            flex: 0 0 30%; /* Правая колонка будет занимать фиксированные 30% ширины */
+            background-color: #f4f4f4; /* Цвет фона правой колонки */
+            padding: 20px;
+            border-radius: 4px;
+        }
+
+        h2 {
+            color: #333;
+            font-size: 20px;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        section:nth-child(2) p {
+            font-weight: bold;
+        }
+
+        .title-task {
+            color: #fff;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+            font-size: 16px;
+        }
+
+        #backBtn {
+            background-color: #e74c3c;
+        }
+
+        #submitBtn:hover {
+            background-color: #2980b9;
+        }
+
+        #backBtn:hover {
+            background-color: #c0392b;
+        }
+
+        .left-column {
+            margin-right: 60px;
+        }
+
+        .code {
+            margin-bottom: 20px;
+        }
+
+        .right-column {
+            overflow-y: scroll;
+            height: 80vh;
+        }
+
+
+        .description {
+            color: black;
+            
+        }
+
+        .input-data {
+            font-size: 18px;
+            font-weight: 700;
+        }
+        .output-data {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+
+        .main-description {
+            overflow-x: scroll;
+        }
+
+
+
+        .answer {
+            display: flex;
+            justify-content: space-between;
+            gap: 5px;
+            color: #000;
+            border: 2px solid #000;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+
+        .answer > p {
+            margin: 0;
+        }
+        .answer-button {
+            color: #3498DB;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .answer-button:hover {
+            color: rgb(41, 128, 185);
+        }
+
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            min-width: 600px;
+            min-height: 550px;
+        }
+        .dark {
+            background: #000;
+            opacity: 0.3;
+            position: fixed;
+            width: 100%;
+            height: 100vh;
+            top: 0;
+            left: 0;
+        }
+        .submit-back {
+            display: flex;
+        }
+
+        .answer > .popup, .answer > .dark {
+            display: none;
+        }
+        .answer.active > .popup, .answer.active > .dark {
+            display: block;
+        }
+        .popup-code {
+            color: #000;
+            font-family: 'Courier New', Courier, monospace;
+            background: #f3f3f3;
+            padding: 4px;
+        }
+
+        .popup-status {
+            display: flex;
+            gap: 8px;
+        }
+        .popup-status > h2 {
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+        .back {
+            padding: 10px 20px;
+            background-color: #c0392b;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+            font-size: 16px;
+            text-decoration: none;
+        }
+        .example {
+            line-height: 10% !important;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1 class="title-task">{{ task.title }}</h1>
+    </header>
+    <main>
+        <div class="left-column">
+            <section class="main-description">
+                <h2>Описание задания</h2>
+                <p class="description">{{ task.description }}</p>
+                <h3 class="example">Примеры:</h3>
+                <pre class="input-data">
+Входные данные:
+{{ task.input_data }} </pre>
+                <pre class="output-data">Выходные данные: 
+{{ task.output_data }} </pre>
+            </section>
+            <section>
+                
+                            <!-- Добавленная форма -->
+            <form id="solveForm" method="post" action="{% url 'solve' pk=task.id %}">
+                {% csrf_token %}
+                <section class="code">
+                    <h2>Область для написания задачи</h2>
+                    <textarea id="taskInput" name="code" rows="10" cols="50"></textarea>
+                </section>
+                <div class="submit-back">
+                    <section>   
+                        <button type="submit" id="submitBtn">Отправить</button>
+                    </form>
+                    </section>
+                        <a class="back" href="{% url 'main' %}">Назад</a>
+                </div>
+        </div>
+        <div class="right-column">
+            <section>
+                <h2>Отправленные решения</h2>
+            </section>
+            {% for i in answer %}
+            <div class="answer">
+                <p class="answer-button">
+                    Посмотреть код
+                </p>
+                <p class="answer-status">
+                    {{ i.stat }}
+                </p>
+                <div class="dark">
+
+                </div>
+                <div class="popup">
+                    <h2>Код</h2>
+<pre><code class="python">
+{{ i.code}}
+</code></pre>
+                    <div class="popup-status" >
+                        <h2>Статус: </h2>
+                        <h2 class="answer-status">{{ i.stat }}</h2>
+                    </div>
+                </div>
+
+            </div>
+            {% endfor %}
+
+            
+        </div>
+    </main>
+    <script>
+        const answerStatus = document.querySelectorAll('.answer-status');
+
+        document.addEventListener('DOMContentLoaded', function() { 
+            for(let i = 0; i < answerStatus.length; i++) {
+                if(answerStatus[i].innerText === 'Нет статуса'){
+                    answerStatus[i].style.color = 'darkgrey';
+                } else if(answerStatus[i].innerText === 'Все верно') {
+                    answerStatus[i].style.color = 'greenyellow';
+                } else if(answerStatus[i].innerText === "Неверное решение") {
+                    answerStatus[i].style.color = 'tomato';
+                } else if(answerStatus[i].innerText === "На проверке") {
+                    answerStatus[i].style.color = 'royalblue';
+                }
+            }
+        });
+    </script>
+    <script>
+        const answers = document.querySelectorAll('.answer');
+        const dark = document.querySelectorAll('.dark');
+        const answerButtons = document.querySelectorAll('.answer-button')
+
+        for (let i = 0; i < answers.length; i++) {
+            answerButtons[i].addEventListener('click', function(){
+                answers[i].className += ' active'
+            })
+
+            dark[i].addEventListener('click', function() {
+                answers[i].className = 'answer'
+            })
+        }
+
+
+    </script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    
+    <!-- and it's easy to individually load additional languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    
+    <script>
+        var codeElement = document.querySelectorAll('.python');
+
+        for (let i = 0; i < codeElement.length; i++) {
+            let codeText = codeElement[i].textContent.replace(/^\s*\n/, '').replace(/\s*$/, '');
+            codeElement[i].textContent = codeText;
+            hljs.highlightElement(codeElement[i]);
+        }
+    </script>
+</body>
+</html>

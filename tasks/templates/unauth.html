@@ -1,0 +1,511 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главный</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            --main-color: #7C73C0;
+            --secondary-color: #fff; 
+            transition: all .3s;
+            background-color: #393841;
+        }
+
+        .wrapper {
+            display: flex;
+            gap: 30px;
+            max-height: 100vh;
+            padding: 25px;
+            justify-content: space-between;
+            
+        }
+        .left {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 25%;
+            position: relative;
+        }
+
+        .theme {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 48px;
+            height: 24px;
+            border: solid 3px var(--main-color);
+            border-radius: 20px;
+            padding: 3px;
+            cursor: pointer;
+            display: flex;
+            justify-content: flex-start;
+            transition: all .3s;
+        }
+
+        .theme.active {
+            justify-content: flex-end;
+            background-color: #393841;
+        }
+
+        .theme-button {
+            width: 16px;
+            height: 100%;
+            background: var(--main-color);
+            border-radius: 50% ;
+            
+        }
+        .date {
+
+            width: 100%;
+            height: 200px;
+            border-radius: 15px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            border: 4px solid var(--main-color);
+        }
+        .date-time {
+            font-size: 80px;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+        }
+        .date-string {
+            font-size: 24px;
+            color: var(--secondary-color);
+        }
+
+        .tasks {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 70vh;
+            border-radius: 15px;
+            padding: 15px;
+            border: 4px solid var(--main-color);
+            gap: 15px;
+            overflow-y: auto;
+        }
+        .tasks-heading {
+            font-size: 27px;
+            color: var(--secondary-color);
+            margin-bottom: 18px;
+        }
+        .tasks-item {
+            color: var(--secondary-color);
+            font-size: 18px;
+        }   
+        .tasks-item:hover {
+            text-decoration: underline;
+        }
+
+       .center {
+            width: 33%;
+            display: flex;
+            flex-direction: column;
+            border: 4px solid var(--main-color);
+            border-radius: 15px;
+            padding: 15px;
+        }
+        .recomend {
+            width: 100%;
+            color: var(--secondary-color);
+            margin-bottom: 40px;
+        }
+        .recomend-heading {
+            font-size: 18px;
+            font-weight: 400;
+            margin-bottom: 20px;
+        }
+        .recomend-buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+    
+        .recomend-button {
+            border: 2px solid var(--main-color);
+            border-radius: 8px;
+            padding: 5px 10px;
+            font-size: 15px;
+            color: var(--main-color);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: transparent;
+        }
+
+        .begin {
+            color: var(--main-color);
+            text-decoration: none;
+        }
+
+        .recomend-button:hover {
+            color: white;
+            background-color: var(--main-color);
+        }
+        .other-heading {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--secondary-color);
+        }
+        .other-list{
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px; 
+        }
+
+        .other-items {
+            width: 48%;
+            padding: 10px;
+            border-radius: 10px;
+            color: var(--secondary-color);
+            border: 4px solid var(--main-color);
+            cursor: pointer;
+
+        }
+        .other-name {
+            font-weight: 400;
+            line-height: 1.1;
+
+
+        }
+
+        .other-items:hover > .other-name{
+            text-decoration: underline;
+        }
+
+        .adress {
+            text-decoration: none;
+        }
+
+        /* */
+        .right {
+            width: 23%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            }
+
+
+
+        .profile {
+            border: solid 4px var(--main-color);
+            border-radius: 15px;
+            width: 100%;
+            height: 38%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+        .profile > .tasks-item {
+            color: var(--secondary-color);
+            font-size: 22px;
+        }
+
+        .profile-image {
+            overflow: hidden;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+        }
+
+        .profile-image > img {
+            width: 100%;
+        }
+        
+
+        .statistic {
+            border: solid 4px var(--main-color);
+            border-radius: 15px;
+            width: 100%;
+            height: 58%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .icons {
+            width: 50px;
+            height: 50px;
+        }
+        .statistic-item {
+            display: flex; 
+            justify-content: space-around;
+        }
+        .statistic-icon {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding-right: 35px;
+        }
+
+        .statistic-text {
+            display: flex;
+            flex-direction: column; 
+            justify-content: space-around;
+            color: var(--secondary-color);
+            font-size: 16px;
+            font-weight: 550;
+            gap: 20px;
+        }
+        .icon-stat {
+            width: 50px;
+            height: 50px; /* Добавлено, чтобы установить высоту и избежать искажения изображения */
+        }
+        
+
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="left">
+            <!-- <div class="theme">
+                <div class="theme-button">
+
+                </div>
+            </div> -->
+            <div class="date">
+                <h2 class="date-time"> 
+                    12:30
+                </h2>
+                <h3 class="date-string">
+                    6 мая - 2023
+                </h3>
+            </div>
+
+            <div class="tasks">
+                <h3 class="tasks-heading">
+                    Последние задачи
+                </h3>
+                {% for i in latest_tasks %}
+                <span  class="tasks-item">
+                    <b>
+                        TASKS №
+                        {% if i.id < 10 %}
+                            0{{ i.id }}
+                        {% else %}
+                            {{ i.id}}
+                        {% endif %},
+                        {{ i.difficulty }}
+
+                    </b>
+                    <a style="color: #ffffff;" class="adress" target="_blank" href="/solve/{{ i.id }}"> {{ i.title }} </a> 
+                </span>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="center">
+            <div class="recomend">
+                <h3 class="recomend-heading">
+                    <b>
+                        Задача: TASKS №
+                        {% if latest_task.id < 10 %}
+                            0{{ latest_task.id }}
+                        {% else %}
+                            {{ latest_task.id}}
+                        {% endif %},
+                        {{ latest_task.difficulty }}
+
+                    </b>
+                    <span class="substring">
+                        {% if latest_task.description|length > 178 %}
+                            {{ latest_task.description|slice:"0:178 "}}...
+                        {% else %}
+                            {{ latest_task.despiraton }}
+                        {% endif %}
+
+                    </span>
+                </h3>
+
+                <div class="recomend-buttons">
+                    <button class="recomend-button">
+                        Пропустить
+                    </button>
+
+                    <button class="recomend-button">
+                       <a href="/solve/1" class="begin">
+                        Начать
+                    </a>
+                    </button>
+                </div>
+
+            </div>
+            <div class="others">
+                <h3 class="other-heading">
+                    Другие задачи
+                </h3>
+                <div class="other-list">
+                    {% for i in random_tasks %}
+                    <div class="other-items">
+                        <h3 class="other-name">
+                            TASKS №
+                            {% if i.id < 10 %}
+                                0{{ i.id}}
+                            {% endif %}
+                            {{ difficulty }}:
+
+                            {% if i.title|length > 45 %}
+                                {{ i.title|slice:"0:45" }}...
+                            {% else %}
+                                {{ i.title}}
+                            {% endif %}
+                       </h3>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="right">
+            <div class="profile">
+                <div class="profile-image">
+                    <img src="./media/icons/avatar_gray.png" alt="">
+                </div>
+
+                <h3 class="tasks-item">
+                    <a style="color: #fff;" href="/login"> Войдите в аккаунт</a>
+                </h3>
+
+            </div>
+            <div class="statistic">
+                <div class="statistic-item">
+                    <div class="statistic-icon">
+                        <img class="icon-stat" src="{% static 'tasks/img/решено_stat.png' %}" alt="">
+                        <img class="icon-stat" src="{% static 'tasks/img/группа_stat.png' %}" alt="">
+                        <img class="icon-stat" src="{% static 'tasks/img/расписание_stat.png' %}" alt="">
+                    </div>
+                    <div class="statistic-text">
+                        <p class="icon-stat"> Решено: <br> ? </p>
+                        <p class="icon-stat"> Группа: <br> ? </p> 
+                        <p class="icon-stat"> Расписание: <br> ? </p>
+                    </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        let timeElement = document.querySelector('.date-time');
+
+        //инициализация времени
+        function initTime() {
+            let date = new Date();
+            let hours = date.getHours();
+            let minutes = date.getMinutes();
+
+            if(minutes < 10) {
+                minutes = '0' + String(minutes);
+            };
+
+            if(hours < 10) {
+                hours = '0' + String(hours);
+            };
+
+            timeElement.innerText = String(hours) + ':' + String(minutes);
+        }
+
+        initTime();
+
+        //поминутное обновление
+        setInterval(initTime, 60000)
+    </script>
+
+    <script>
+        let date = new Date();
+        let monthArray = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"]
+        
+        let currentMonth = date.getMonth();
+        let currentYear = date.getFullYear();
+        let currentDay = date.getDate();
+        let dateElement = document.querySelector('.date-string');
+    
+        dateElement.innerText = monthArray[currentMonth] + ' ' + currentDay + '-е ' + ' ' + currentYear;
+    
+    </script>
+<!-- 
+    <script>
+        let theme1 = document.querySelector('.theme');
+        let body1 = document.querySelector('body');
+
+        theme.addEventListener('click', function() {
+            if(theme1.className === 'theme') {
+                theme1.className = 'theme active';
+
+                body1.style.setProperty("--secondary-color", "#fff")
+                body1.style.background = "#393841"
+            } else {
+                theme.className = 'theme'
+                
+                body.style.setProperty("--secondary-color", "#4a4479")
+                body.style.background = "#fff"
+            }
+        })
+    </script> -->
+
+<script>
+    // Ваш первый скрипт для инициализации времени
+    // ...
+    let theme = document.querySelector('.theme');
+    let body = document.querySelector('body');
+
+    // Ваш второй скрипт для определения темы и изменения цветов
+    function changeTheme() {
+        let currentTime = new Date().getHours();
+
+        if(currentTime >= 12 && currentTime < 18) {
+            if(theme.className === 'theme') {
+                theme.className = 'theme active';
+
+                body.style.setProperty("--main-color", "#219C90");
+                body.style.setProperty("--secondary-color", "#fff");
+                body.style.background = '#EE9322'
+            } else {
+                theme.className = 'theme'
+                
+                body.style.setProperty("--main-color", "#EE9322");
+                body.style.setProperty("--secondary-color", "#219C90");
+                body.style.background = '#fff   '
+            }
+        } else {
+            if(theme.className === 'theme') {
+                theme.className = 'theme active';
+
+                body.style.setProperty("--secondary-color", "#fff")
+                body.style.background = "#393841"
+            } else {
+                theme.className = 'theme'
+                
+                body.style.setProperty("--secondary-color", "#4a4479")
+                body.style.background = "#fff"
+            }
+        }
+        
+    }
+
+    theme.addEventListener('click', changeTheme)
+
+    // Вызываем функцию при загрузке страницы
+    window.onload = function() {
+        initTime();
+    }
+
+    // Поминутное обновление времени и темы
+    setInterval(function() {
+        initTime();
+    }, 60000);
+    
+    // Остальные скрипты...
+    // ...
+</script>
+</body>
+</html>
